@@ -16,7 +16,7 @@ import java.util.Queue;
  */
 public class Js5Worker {
 
-	public static final int LOADING_REQUIREMENTS = 27;
+	public static final int LOADING_REQUIREMENTS = 28;
 	public static final int BLOCK_SIZE = 102400;
 
 	public enum State {
@@ -46,7 +46,7 @@ public class Js5Worker {
 		requests = new LinkedList<FileRequest>();
 		waiting = new HashMap<Long, FileRequest>();
 		state = State.DISCONNECTED;
-		outputBuffer = ByteBuffer.allocate(6);
+		outputBuffer = ByteBuffer.allocate(10);
 		inputBuffer = ByteBuffer.allocate(5);
 	}
 
@@ -71,7 +71,7 @@ public class Js5Worker {
 
 			ByteBuffer buffer = ByteBuffer.allocate(12 + 32);
 			buffer.put((byte) 15);       // handshake type
-			buffer.put((byte) (10 + 32)); // size
+			buffer.put((byte) (10 + key.getBytes().length)); // size
 			buffer.putInt(major);        // client's major version
 			buffer.putInt(minor);        // client's minor version?
 			buffer.put(key.getBytes());  // handshake key?
@@ -172,9 +172,17 @@ public class Js5Worker {
 			try {
 				while (!requests.isEmpty() && waiting.size() < 20) {
 					FileRequest request = requests.poll();
-					outputBuffer.put(request.getIndex() == 255 ? (byte) 1 : (byte) 0);
+									
+					byte unknown = 0x01;
+					if (request.getIndex() == 255 && request.getFile() == 255) {
+						unknown = 0x21;
+					}
+									
+					outputBuffer.put(unknown);
 					outputBuffer.put((byte) request.getIndex());
 					outputBuffer.putInt(request.getFile());
+					outputBuffer.putShort((short) this.major);
+					outputBuffer.putShort((short) 0);
 					output.write(outputBuffer.array());
 					output.flush();
 					outputBuffer.clear();
@@ -259,14 +267,18 @@ public class Js5Worker {
 	private void sendConnectionInfo() {
 		try {
 			outputBuffer.put((byte) 6);
-			putMedInt(outputBuffer, 4);
+			putMedInt(outputBuffer, 0x000005);
+			outputBuffer.putShort((short) 0);
+			outputBuffer.putShort((short) this.major);
 			outputBuffer.putShort((short) 0);
 			output.write(outputBuffer.array());
 			output.flush();
 			outputBuffer.clear();
 
 			outputBuffer.put((byte) 3);
-			putMedInt(outputBuffer, 0);
+			putMedInt(outputBuffer, 0x000005);
+			outputBuffer.putShort((short) 0);
+			outputBuffer.putShort((short) this.major);
 			outputBuffer.putShort((short) 0);
 			output.write(outputBuffer.array());
 			output.flush();
