@@ -1,6 +1,5 @@
 package com.method.rscd.net;
 
-import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -123,23 +122,6 @@ public class Js5Worker {
 					if (response == 0) {
 						state = State.CONNECTED;
 						System.out.println("Correct version: " + major);
-
-						ByteBuffer sizes = ByteBuffer.allocate(LOADING_REQUIREMENTS * Integer.BYTES);
-						int read = 0, off = 0, len = sizes.capacity();
-						while (len > 0) {
-							read = input.read(sizes.array(), off, len);
-							if (read <= 0) {
-								throw new EOFException();
-							}
-							off += read;
-							len -= read;
-						}
-
-						int end = sizes.capacity() / Integer.BYTES;
-						System.out.print("Required loading element sizes: ");
-						for (int i = 0; i < end; i++) {
-							System.out.print(sizes.getInt() + (i < end - 1 ? "," : ""));
-						}
 
 						System.out.println();
 
