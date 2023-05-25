@@ -23,7 +23,7 @@ import java.util.zip.CRC32;
  */
 public class CacheDownloader {
 
-	private static final int MAJOR_VERSION = 892;
+	private static final int MAJOR_VERSION = 925;
 	private static final int MINOR_VERSION = 1;
 	private static final String HOST = "content.runescape.com";
 	private static final int WORLD = 2;
@@ -76,7 +76,9 @@ public class CacheDownloader {
 	 * Connects to the server, retrying as needed if the version is incorrect.
 	 */
 	private void connect() {
-		String key = Crawler.extractParameter(Crawler.downloadPage("http://world" + WORLD + ".runescape.com/g=runescape/,j0"), 32);
+		String key = Crawler.getKey("http://world21.runescape.com/jav_config.ws?binaryType=2");
+		//String key = Crawler.extractParameter(Crawler.getKey("http://world21.runescape.com/jav_config.ws?binaryType=2"), 32);
+		//String key = "Tvi24CRxP0-hqpwDRyl0-nYh4EBpjsUv";
 		if (key == null) {
 			System.err.println("Couldn't find valid handshake key.");
 			System.exit(1);
