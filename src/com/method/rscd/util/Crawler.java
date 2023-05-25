@@ -5,47 +5,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class Crawler {
 
-	public static String downloadPage(String address) {
-		URL url;
-		try {
-			url = new URL(address);
-		} catch (MalformedURLException ex) {
-			ex.printStackTrace();
-			return null;
-		}
-
-		try {
-			BufferedReader reader = new BufferedReader(new InputStreamReader(url.openConnection().getInputStream()));
-			StringBuilder page = new StringBuilder();
-			String line;
-			while ((line = reader.readLine()) != null) {
-				page.append(line);
-			}
-			return page.toString();
-		} catch (IOException ex) {
-			ex.printStackTrace();
-			return null;
-		}
-	}
-
-	public static String extractParameter(String input, int length) {
-		if (input == null) {
-			return null;
-		}
-		Pattern p = Pattern.compile("value=\"(\\S{" + length + "})\"");
-		Matcher m = p.matcher(input);
-		if (m.find()) {
-			return m.group(1);
-		} else {
-			return null;
-		}
-	}
-	
 	public static String getKey(String address) {
 		URL url;
 		try {
@@ -62,7 +24,6 @@ public class Crawler {
 			while ((line = reader.readLine()) != null) {
 				if(line.contains("param=29="))
 					return line.substring(9);
-				//	System.out.println();
 				page.append(line);
 			}
 			return page.toString();

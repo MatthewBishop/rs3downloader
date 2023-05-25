@@ -77,8 +77,6 @@ public class CacheDownloader {
 	 */
 	private void connect() {
 		String key = Crawler.getKey("http://world21.runescape.com/jav_config.ws?binaryType=2");
-		//String key = Crawler.extractParameter(Crawler.getKey("http://world21.runescape.com/jav_config.ws?binaryType=2"), 32);
-		//String key = "Tvi24CRxP0-hqpwDRyl0-nYh4EBpjsUv";
 		if (key == null) {
 			System.err.println("Couldn't find valid handshake key.");
 			System.exit(1);
