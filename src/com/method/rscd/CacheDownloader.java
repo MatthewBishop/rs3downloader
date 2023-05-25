@@ -244,6 +244,8 @@ public class CacheDownloader {
 	 */
 	private void update() {
 		for (int i = 0; i < versionTable.getEntryCount(); i++) {
+			if(i != 26 && i != 53)
+				continue;
 			String message = "Updating index " + i;
 
 			List<Integer> changes = findFileChanges(i);
