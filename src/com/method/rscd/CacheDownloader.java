@@ -8,9 +8,10 @@ import com.method.rscd.net.Js5Worker;
 import com.method.rscd.util.Crawler;
 import com.method.rscd.util.Whirlpool;
 
-import java.io.IOException;
+import java.io.*;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -29,7 +30,7 @@ public class CacheDownloader {
 	private static final int WORLD = 2;
 	private static final int LANGUAGE = 0; // English language by default
 
-	private static final int MUSIC_INDEX = 40;
+	static final int MUSIC_INDEX = 40;
 	private static final int PROGRESS_TICKS = 20;
 
 	private Js5Worker js5Worker;
@@ -244,7 +245,7 @@ public class CacheDownloader {
 	 */
 	private void update() {
 		for (int i = 0; i < versionTable.getEntryCount(); i++) {
-			if(i != 26 && i != 53)
+			if(i != 19 && i != 7)
 				continue;
 			String message = "Updating index " + i;
 
